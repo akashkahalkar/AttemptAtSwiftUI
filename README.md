@@ -2,17 +2,16 @@
 
 SwiftUI lets us build declarative user interfaces in Swift. There's a new declarative UI structure that defines how our layouts look and work. Updating the UI preview automatically generates new Swift code, and changing the Swift code updates the UI preview.
 
-
-I tried to Replicate the User Interface of a well known App. My Attempt was to check how much of structure i can create with SwiftUI and results were amazing.
+I tried to replicate the UI of a well known App. My Attempt was to check how much of structure i can create with SwiftUI and results were amazing.
 
 ### Note
 >I am not sure if these are the best practises to do things in SwiftUI.
-
 
 ## References
 ### Articles
 - [SwiftUI Cheat Sheet](https://github.com/SimpleBoilerplates/SwiftUI-Cheat-Sheet)
 - [Introducing SwiftUI](https://developer.apple.com/tutorials/swiftui)
+- [To Create Read me file](https://www.makeareadme.com/)
 
 ### Video Links
 - [Introducing SwiftUI: Building Your First App](https://developer.apple.com/videos/play/wwdc2019/204/)
