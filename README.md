@@ -13,16 +13,16 @@ I tried to replicate the UI of a well known App. My Attempt was to check how muc
 <table>
     <tr>
         <td>
-            <img src = "Screenshots\WAChatList.png" width = 100 alt = "Chatlist">
+            <img src = "Screenshots\WAChatList.png" width = 200 alt = "Chatlist">
         </td>
         <td>
-            <img src = "Screenshots\WAChatListDelete.png" width = 100 alt = "Chat list Delete">
+            <img src = "Screenshots\WAChatListDelete.png" width = 200 alt = "Chat list Delete">
         </td>
         <td>
-            <img src = "Screenshots\WAHome.png" width = 100 alt = "Home">
+            <img src = "Screenshots\WAHome.png" width = 200 alt = "Home">
         </td>
         <td>
-            <img src = "Screenshots\WAUserDetail.png" width = 100 alt = "user detail">
+            <img src = "Screenshots\WAUserDetail.png" width = 200 alt = "user detail">
         </td>
     </tr>
 </table>
