@@ -9,6 +9,24 @@ I tried to replicate the UI of a well known App. My Attempt was to check how muc
 ### Version
 > Swift 5, iOS 13, Xcode 11 beta
 
+### Screenshots
+<table>
+    <tr>
+        <td>
+            <img src = "Screenshots\WAChatList.png" width = 100 alt = "Chatlist">
+        </td>
+        <td>
+            <img src = "Screenshots\WAChatListDelete.png" width = 100 alt = "Chat list Delete">
+        </td>
+        <td>
+            <img src = "Screenshots\WAHome.png" width = 100 alt = "Home">
+        </td>
+        <td>
+            <img src = "Screenshots\WAUserDetail.png" width = 100 alt = "user detail">
+        </td>
+    </tr>
+</table>
+
 ## References
 ### Articles
 - [SwiftUI Cheat Sheet](https://github.com/SimpleBoilerplates/SwiftUI-Cheat-Sheet)
