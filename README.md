@@ -5,6 +5,7 @@ SwiftUI lets us build declarative user interfaces in Swift. There's a new declar
 I tried to replicate the UI of a well known App. My Attempt was to check how much of structure i can create with SwiftUI and results were amazing.
 
 >I am not sure if these are the best practises to do things in SwiftUI.
+> I removed all the preview code as i was running MacOS Mojave and there's no preview available yet. 
 
 ### Version
 > Swift 5, iOS 13, Xcode 11 beta
