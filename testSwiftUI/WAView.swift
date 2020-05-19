@@ -13,20 +13,25 @@ struct WAView : View {
     /// It is not advise to use external dependecies with @State wrapper
     @State private var userStore: UserStore = UserStore()
     @State private var selectedMenuItem: Int = 0
+    @State private var addContactsViewPresented = false
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading) {
-                Text("SupApp").bold().font(.title).padding().foregroundColor(.white)
-                HStack(alignment: .center, spacing: 50) {
-                    //can not iterate with ForEach because menuArray does not conform
-                    //to protocol Identifiable
+                Text(verbatim: "Wasup")
+                    .font(.title)
+                    .padding()
+                    .foregroundColor(.white)
+                HStack {
                     HeaderButton(title: menuArray[0], selectedMenuItem: $selectedMenuItem)
+                    Spacer()
                     HeaderButton(title: menuArray[1], selectedMenuItem: $selectedMenuItem)
+                    Spacer()
                     HeaderButton(title: menuArray[2], selectedMenuItem: $selectedMenuItem)
-                    }
-                    .frame(minWidth: .zero, maxWidth: .infinity, alignment: .center)//.padding(0.0)
-                    .background(Color.WADarkGreen)
+                }
+                .frame(minWidth: .zero, maxWidth: .infinity, alignment: .center)
+                .background(Color.WADarkGreen)
+                .padding()
                 
                 if selectedMenuItem == 0 {
                     List {
@@ -49,12 +54,19 @@ struct WAView : View {
                         Text("CAlls View")
                     }
                 }
-                }
-                .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
-                .background(Color.WADarkGreen)
+            }
+            .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
+            .background(Color.WADarkGreen)
+            Button(action: {
+                self.addContactsViewPresented.toggle()
+            }) {
+                FloatingButton().padding(.trailing, 10.0)
+            }
             
-            PresentationButton(FloatingButton(), destination: AddContactsView(userStore: $userStore)).padding()
-        }
+            .sheet(isPresented: $addContactsViewPresented) {
+                AddContactsView(userStore: self.$userStore, hideView: self.$addContactsViewPresented)
+            }
+        }//zstack
     }
 }
 
@@ -72,32 +84,23 @@ struct FloatingButton: View {
 
 struct AddContactsView: View {
     @Binding var userStore: UserStore
+    @Binding var hideView: Bool
     @State private var name: String = ""
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(alignment: .leading) {
+                Text("Enter friends Name").foregroundColor(.black)
                 HStack {
-                    Text("Name : ").color(.white).font(.headline)
-                    //TextField($name).foregroundColor(.white).background(Color.gray).frame(height: 60).padding()
-                    TextField($name, placeholder: Text("User Name"))
-                        //.frame(maxWidth: 100, maxHeight: 60)
-                        .background(Color.white)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.leading, 10)
-                        .lineLimit(3)
-                    }
-                    .padding()
-                    .background(Color.WADarkGreen)
-                
-                Button(action: {
-                    withAnimation(Animation.basic(duration: 0.5, curve: BasicAnimationTimingCurve.easeInOut)) {
+                    TextField("Enter friends name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    Button(action: {
                         self.addUser()
+                    }) {
+                        AppButton(title: "Add")
                     }
-                }) {
-                    AppButton(title: "Add User", color: .WADarkGreen, textColor: .white)
                 }
-            }
+                }.padding()
             .navigationBarTitle(Text("Add User"), displayMode: .inline)
         }
     }
@@ -105,6 +108,8 @@ struct AddContactsView: View {
     func addUser() {
         if !name.isEmpty {
             userStore.addUser(userName: name)
+            name = ""
+            hideView.toggle()
         }
     }
 }
@@ -114,18 +119,19 @@ struct HeaderButton: View {
     @Binding var selectedMenuItem: Int
     
     var body: some View {
-        
-        return Button(action: {
-            withAnimation(Animation.basic(duration: 0.5, curve: BasicAnimationTimingCurve.easeInOut)) {
-                self.buttonPressed()
-            }
-        }) {
-            Text(title).color(selectedMenuItem == menuArray.firstIndex(of: title) ? Color.white : Color.WAWhiteUnselected)
-                                .bold()
-                                .layoutPriority(0.5)
-        }
+        Button(action: {
+            self.buttonPressed()
+        }, label: {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+                .underline(isCurrentIndexSelected(), color: .white)
+        })
     }
     
+    func isCurrentIndexSelected() -> Bool {
+        selectedMenuItem == menuArray.firstIndex(of: title)
+    }
     func buttonPressed() {
         selectedMenuItem = menuArray.firstIndex(of: title) ?? 0
     }
@@ -135,25 +141,24 @@ struct WAHomeRow : View {
     
     var userInfo: UserInfo
     var body: some View {
-        
-        NavigationButton(destination: WAUserDetailView(user: userInfo).navigationBarTitle(Text("Details View"), displayMode: .inline)) {
+        NavigationLink(destination: WAUserDetailView(user: userInfo)) {
             HStack {
                 Image(userInfo.userImage)
                     .resizable()
-                    .aspectRatio(contentMode: ContentMode.fill)
                     .clipShape(Circle())
-                    .frame(width: 50.0, height: 50.0, alignment: .center)
+                    .aspectRatio(contentMode: ContentMode.fill)
+                    .frame(width: CGFloat(50.0),
+                           height: CGFloat(50.0),
+                           alignment: Alignment.center)
+                    
                 VStack(alignment: .leading) {
-                    HStack {
-                        Text(userInfo.userName).font(.headline)
-                        Spacer()
-                        Text(userInfo.time).font(.footnote).foregroundColor(Color.secondary)
-                    } //user name and time stack
-                    Text(userInfo.lastMessage)
-                        .color(.secondary)
-                } //user info area stack
+                    Text(userInfo.userName).font(.headline)
+                    Text(userInfo.lastMessage).font(.subheadline).foregroundColor(.gray)
+                }
             }
         }
+        
+        
     }
 }
 

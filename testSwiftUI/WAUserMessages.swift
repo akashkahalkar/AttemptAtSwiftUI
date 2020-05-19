@@ -12,79 +12,56 @@ import SwiftUI
 
 struct WAUserDetailView: View {
     var user: UserInfo
-    let msgStore = MessageStore()
     @State private var newMessage: String = ""
-    
+    @ObservedObject private var msgStore = MessageStore()
+    @ObservedObject private var keyboard = KeyboardResponder()
+        
     var body: some View {
-        VStack (alignment: .leading) {
-            HStack(spacing: 10.0) {
+        VStack (alignment: HorizontalAlignment.leading) {
+            HStack(spacing: CGFloat(10.0)) {
                 Image(user.userImage)
                     .resizable()
                     .clipShape(Circle())
                     .padding(.leading, 10.0)
-                    .frame( width: 40.0, height: 40.0)
+                    .frame(width: 40.0, height: 40.0)
                 
                 
                 VStack(alignment: .leading) {
-                    PresentationButton(Text(user.userName).font(.title).color(.white), destination: UserInfoScreen(user: user)).foregroundColor(.clear)
+                    //PresentationButton(Text(user.userName).font(.title).color(.white), destination: UserInfoScreen(user: user)).foregroundColor(.clear)
+                    NavigationLink(destination: UserInfoScreen(user: user)) {
+                        Text(verbatim: user.userName).font(.headline).foregroundColor(.white)
+                    }
                     if user.isOnline {
-                        Text("online").font(.footnote).color(.white)
+                        Text(verbatim: "online").font(.footnote).foregroundColor(.white)
                     }
                 }
                 }
                 .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: 80.0, alignment: .leading)
                 .background(Color.WADarkGreen)
             Group {
+                //UITableView.appearance().separatorColor = .clear
                 WAChatList(user: user, msgStore: msgStore)
                 }.background(Color.WAMsgListBackground)
             
+            Spacer()
             HStack {
-                HStack {
-                    Image(systemName: "smiley")
-                        .resizable()
-                        .aspectRatio(contentMode: ContentMode.fit)
-                        .frame(width: 40)
-                    //Spacer()
-                    TextField($newMessage, placeholder: Text("Type a Message"))
-                        //.frame(maxWidth: 100, maxHeight: 60)
-                        .background(Color.white)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.leading, 10)
-                        .lineLimit(3)
-                    
-//                    TextField($newMessage, placeholder: Text("Type a Message"))
-//                        .lineLimit(10)
-//                        .frame(height: 80)
-//                        .textFieldStyle(.roundedBorder)
-//                        .fixedSize(horizontal: true, vertical: false)
-                }
-                //.frame(height: 60)
-                //Spacer()
+                TextField("Type a message", text: $newMessage)
+                    .foregroundColor(.WADarkGreen)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Spacer()
                 Button(action: {
                     self.sendMessage()
                 }) {
-                    Group {
-                        Image(systemName: "greaterthan.circle.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: ContentMode.fit)
-                        }
-                        .background(Color.WADarkGreen)
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
+                    Text(verbatim: "send")
                 }
-                }
-                .frame(maxWidth: .infinity, maxHeight: 100)
-                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-                .background(Color.gray)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-            
-            
+                }.padding().padding(.bottom, keyboard.currentHeight)
+            .navigationBarTitle("User details")
             }
             .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
     }
     
     func sendMessage() {
-        if !$newMessage.value.isEmpty {
+        if !$newMessage.wrappedValue.isEmpty {
             msgStore.sendMessage(uname: user.userName, msg: newMessage)
             newMessage = ""
         }
@@ -94,7 +71,7 @@ struct WAUserDetailView: View {
 // MARK: User detail list
 struct WAChatList: View {
     var user: UserInfo
-    @ObjectBinding var msgStore: MessageStore
+    @ObservedObject var msgStore: MessageStore
     
     var body: some View {
         
@@ -102,7 +79,7 @@ struct WAChatList: View {
         return List {
             ForEach(messages) {
                 WAChatListRow(message: $0).frame(height: 60)
-                }.onDelete(perform: delete)
+            }.onDelete(perform: delete)
         }
     }
     
@@ -129,13 +106,14 @@ struct WAChatListRow: View {
         return VStack(alignment: horizontalAlignment) {
             HStack {
                 HStack {
-                    Text(message.message).color(.black).lineLimit(nil)
+                    Text(message.message)
                     Text(message.timeStamp).font(.footnote)
                     }
-                    .padding().background(color)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding()
+                .background(color)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 60, alignment: alignment)
+            .frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 60, alignment: alignment)
         }
     }
 }
