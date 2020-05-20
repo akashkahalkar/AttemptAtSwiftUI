@@ -11,19 +11,27 @@ import SwiftUI
 // MARK: - User Detail View
 
 struct WAUserDetailView: View {
+    
+    
     var user: UserInfo
     @State private var newMessage: String = ""
     @ObservedObject private var msgStore = MessageStore()
     @ObservedObject private var keyboard = KeyboardResponder()
-        
+            
+    init(user: UserInfo) {
+        self.user = user
+        // To remove only extra separators below the list:
+        UITableView.appearance().separatorStyle = .none
+    }
+    
     var body: some View {
         VStack (alignment: HorizontalAlignment.leading) {
             HStack(spacing: CGFloat(10.0)) {
                 Image(user.userImage)
                     .resizable()
                     .clipShape(Circle())
-                    .padding(.leading, 10.0)
-                    .frame(width: 40.0, height: 40.0)
+                    .padding(.leading, 10.0).aspectRatio(contentMode: ContentMode.fill)
+                    .frame(width: 50.0, height: 50.0)
                 
                 
                 VStack(alignment: .leading) {
@@ -78,7 +86,7 @@ struct WAChatList: View {
         let messages = msgStore.messageDatabase[user.userName] ?? []
         return List {
             ForEach(messages) {
-                WAChatListRow(message: $0).frame(height: 60)
+                WAChatListRow(message: $0).frame(height: 50)
             }.onDelete(perform: delete)
         }
     }
@@ -113,7 +121,7 @@ struct WAChatListRow: View {
                 .background(color)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-            .frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 60, alignment: alignment)
+            .frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 50, alignment: alignment)
         }
     }
 }

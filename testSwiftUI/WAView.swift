@@ -12,51 +12,50 @@ import SwiftUI
 struct WAView : View {
     /// It is not advise to use external dependecies with @State wrapper
     @State private var userStore: UserStore = UserStore()
-    @State private var selectedMenuItem: Int = 0
     @State private var addContactsViewPresented = false
+    @State private var selectetState: Int = 0
+    
+    init() {
+        UITableView.appearance().tableFooterView = UIView()
+        UITableView.appearance().separatorStyle = .singleLine
+    }
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading) {
-                Text(verbatim: "Wasup")
-                    .font(.title)
-                    .padding()
-                    .foregroundColor(.white)
-                HStack {
-                    HeaderButton(title: menuArray[0], selectedMenuItem: $selectedMenuItem)
-                    Spacer()
-                    HeaderButton(title: menuArray[1], selectedMenuItem: $selectedMenuItem)
-                    Spacer()
-                    HeaderButton(title: menuArray[2], selectedMenuItem: $selectedMenuItem)
+                Picker(selection: $selectetState, label: Text(verbatim: "picker")) {
+                    Text(verbatim: "CHAT").tag(0)
+                    Text(verbatim: "STATUS").tag(1)
+                    Text(verbatim: "CALLS").tag(2)
                 }
-                .frame(minWidth: .zero, maxWidth: .infinity, alignment: .center)
-                .background(Color.WADarkGreen)
-                .padding()
+                .frame(height: 60.0).background(Color.WADarkGreen).foregroundColor(.white)
+                .pickerStyle(SegmentedPickerStyle())
+                    
                 
-                if selectedMenuItem == 0 {
+                if selectetState == 0 {
                     List {
                         ForEach(userStore.userInfo) { user in
                             WAHomeRow(userInfo: user)
                         }
                     }
-                } else if selectedMenuItem == 1 {
+                } else if selectetState == 1 {
                     List {
-                        Text("Status View")
-                        Text("Status View")
-                        Text("Status View")
-                        Text("Status View")
+                        StatusRow()
+                        StatusRow()
+                        StatusRow()
+                        
                     }
                 } else {
                     List {
-                        Text("CAlls View")
-                        Text("CAlls View")
-                        Text("CAlls View")
-                        Text("CAlls View")
+                        StatusRow()
+                        StatusRow()
+                        StatusRow()
                     }
                 }
             }
             .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
-            .background(Color.WADarkGreen)
+            //.background(Color.WADarkGreen)
+            
             Button(action: {
                 self.addContactsViewPresented.toggle()
             }) {
@@ -66,6 +65,7 @@ struct WAView : View {
             .sheet(isPresented: $addContactsViewPresented) {
                 AddContactsView(userStore: self.$userStore, hideView: self.$addContactsViewPresented)
             }
+        .navigationBarTitle("Wassup")
         }//zstack
     }
 }
@@ -157,8 +157,26 @@ struct WAHomeRow : View {
                 }
             }
         }
-        
-        
+    }
+}
+
+struct StatusRow : View {
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "faceid")
+                .resizable()
+                .clipShape(Circle())
+                .aspectRatio(contentMode: ContentMode.fill)
+                .frame(width: CGFloat(50.0),
+                       height: CGFloat(50.0),
+                       alignment: Alignment.center)
+                
+            VStack(alignment: .leading) {
+                Text("userInfo.userName").font(.headline)
+                Text("userInfo.lastUpdateTiming").font(.subheadline).foregroundColor(.gray)
+            }
+        }
     }
 }
 

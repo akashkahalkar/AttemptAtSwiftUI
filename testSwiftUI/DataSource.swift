@@ -111,5 +111,6 @@ extension Color {
     public static let WASentMessage = Color.init(.sRGB, red: 0.86, green: 0.97, blue: 0.78, opacity: 1.0)
     public static let WAMsgListBackground = Color.init(.sRGB, red: 0.93, green: 0.90, blue: 0.87, opacity: 1.0)
     public static let WAWhiteUnselected = Color.init(.sRGB, red: 1, green: 1, blue: 1, opacity: 0.5)
+    public static let WAbackgroundSegment = Color.init(.sRGB, red: 212.0/255.0, green: 212.0/255.0, blue: 212.0/255.0, opacity: 1.0)
 }
 
