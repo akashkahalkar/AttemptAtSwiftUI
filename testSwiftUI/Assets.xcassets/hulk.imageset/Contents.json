@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "220px-Ivanka_Trump_official_photo.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "hulk.jpg",
       "scale" : "2x"
     },
     {

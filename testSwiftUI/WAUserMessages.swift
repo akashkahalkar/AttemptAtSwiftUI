@@ -45,7 +45,7 @@ struct WAUserDetailView: View {
                 }
                 }
                 .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: 80.0, alignment: .leading)
-                .background(Color.WADarkGreen)
+                .background(Color(AVColors.darkRed))
             Group {
                 //UITableView.appearance().separatorColor = .clear
                 WAChatList(user: user, msgStore: msgStore)
@@ -54,7 +54,7 @@ struct WAUserDetailView: View {
             Spacer()
             HStack {
                 TextField("Type a message", text: $newMessage)
-                    .foregroundColor(.WADarkGreen)
+                    .foregroundColor(Color(AVColors.darkRed))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Spacer()
                 Button(action: {
@@ -70,7 +70,7 @@ struct WAUserDetailView: View {
     
     func sendMessage() {
         if !$newMessage.wrappedValue.isEmpty {
-            msgStore.sendMessage(uname: user.userName, msg: newMessage)
+            msgStore.sendMessage(uid: user.id, msg: newMessage)
             newMessage = ""
         }
     }
@@ -83,7 +83,7 @@ struct WAChatList: View {
     
     var body: some View {
         
-        let messages = msgStore.messageDatabase[user.userName] ?? []
+        let messages = msgStore.messageDatabase[user.id] ?? []
         return List {
             ForEach(messages) {
                 WAChatListRow(message: $0).frame(height: 50)

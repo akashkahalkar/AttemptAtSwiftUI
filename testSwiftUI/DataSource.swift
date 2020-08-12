@@ -12,13 +12,14 @@ import Combine
 
 let menuArray = ["CHAT", "STATUS", "CAllS"]
 
+//User class
 struct UserInfo: Identifiable {
     var id: UUID = UUID()
     
     var userImage: String
     var userName: String
-    var time: String
-    var lastMessage: String
+    //var time: String
+    var lastMessage: UserMessage?
     var isOnline = false
 }
 
@@ -28,82 +29,88 @@ enum MessageType {
 
 struct UserMessage: Identifiable {
     var id: UUID = UUID()
-    
+    var uid: UUID
     var messageType: MessageType
     var message: String
     var timeStamp: String
 }
 
+struct Avengers {
+    static let captainAmerica = UserInfo(userImage: "steve", userName: "Steve Rogers")
+    static let ironMan = UserInfo(userImage: "tony", userName: "Tony Stark")
+    static let thor = UserInfo(userImage: "thor", userName: "Thor")
+    static let blackWidow = UserInfo(userImage: "natasha", userName: "Natasha Romanoff")
+}
 
+let messageData: [UUID: [UserMessage]] = [
+    Avengers.ironMan.id: [
+        UserMessage(uid: Avengers.ironMan.id, messageType: .sent, message: "Hey", timeStamp: Date().getTimeStamp()),
+        UserMessage(uid: Avengers.ironMan.id, messageType: .received, message: "I dont have time.", timeStamp: Date().getTimeStamp())
+    ],
+    Avengers.captainAmerica.id: [
+        UserMessage(uid: Avengers.captainAmerica.id, messageType: .sent, message: "Language", timeStamp: Date().getTimeStamp())
+    ],
+    Avengers.thor.id: [
+        UserMessage(uid: Avengers.thor.id, messageType: .sent, message: "beer", timeStamp: Date().getTimeStamp())
+    ]
+]
+
+//handles messages database
 class MessageStore: ObservableObject {
-    //var didChange = PassthroughSubject<MessageStore, Never>()
     
-    @Published var messageDatabase: [String: [UserMessage]]
+    @Published var messageDatabase: [UUID: [UserMessage]]
     
-    init(msgDb: [String: [UserMessage]] = messageData) {
+    init(msgDb: [UUID: [UserMessage]] = messageData) {
         messageDatabase = msgDb
     }
     
-    func sendMessage(uname: String, msg: String) {
+    func sendMessage(uid: UUID, msg: String) {
         
-        let newMessage = UserMessage(messageType: .sent, message: msg, timeStamp: getTimeStamp())
+        let newMessage = UserMessage(uid: uid, messageType: .sent, message: msg, timeStamp: Date().getTimeStamp())
 
-        if var msgStore = messageDatabase[uname] {
+        if var msgStore = messageDatabase[uid] {
             msgStore.append(newMessage)
-            messageDatabase[uname] = msgStore
+            messageDatabase[uid] = msgStore
         } else {
-            messageDatabase[uname] = [newMessage]
+            messageDatabase[uid] = [newMessage]
         }
-        print("Message Count", messageDatabase[uname]?.count ?? 0)
-        print(getTimeStamp())
-        //didChange.send(self)
     }
     
     func delete(user: UserInfo, indexSet: IndexSet) {
-        if var messages = messageDatabase[user.userName], let index = indexSet.first {
+        if var messages = messageDatabase[user.id], let index = indexSet.first {
             messages.remove(at: index)
-            messageDatabase[user.userName] = messages
-           // didChange.send(self)
+            messageDatabase[user.id] = messages
         }
     }
 }
 
-public func getTimeStamp() -> String {
-    let currentDateTime = Date()
-    // initialize the date formatter and set the style
-    let formatter = DateFormatter()
-    formatter.dateFormat = "hh:mm a"
-    return formatter.string(from: currentDateTime)
-}
-
 // MARK: - Dummy users
-let dataArray = [
-    UserInfo(userImage: "ivanka", userName: "Her", time: "12.15 pm", lastMessage: "where r u?🥰", isOnline: true),
-    UserInfo(userImage: "donald", userName: "Her Father", time: "2.15 pm", lastMessage: "Stay away from my daughter"),
-    UserInfo(userImage: "boy", userName: "Buddy", time: "1.16 pm", lastMessage: "Hey dude!"),
-]
+let usersDataArray = [Avengers.ironMan,
+                      Avengers.captainAmerica,
+                      Avengers.thor,
+                      Avengers.blackWidow]
 
 //MARK: - Dummy Message
 
-let messageData: [String: [UserMessage]] = [ "Her": [UserMessage(messageType: .sent, message: "Hey", timeStamp: "00:00 PM"),
-                                                     UserMessage(messageType: .received, message: "hello", timeStamp: "00:00 PM"),
-                                                     UserMessage(messageType: .received, message: "where r u?🥰", timeStamp: "00:00 PM")],
-                                             "Her Father": [UserMessage(messageType: .received, message: "Stay Away from my daughter", timeStamp: "00:00 PM")]
-]
+
 
 class UserStore: ObservableObject {
     var didChange = PassthroughSubject<[UserInfo], Never>()
     var userInfo: [UserInfo]
     
-    init(users: [UserInfo] = dataArray) {
+    init(users: [UserInfo] = usersDataArray) {
         self.userInfo = users
     }
     
     func addUser(userName: String) {
-        let user = UserInfo(userImage: "boy", userName: userName, time: getTimeStamp(), lastMessage: "No New Message", isOnline: false)
+        let user = UserInfo(userImage: "boy", userName: userName, lastMessage: nil, isOnline: false)
         userInfo.append(user)
         didChange.send(userInfo)
     }
+}
+
+struct AVColors {
+    public static let darkRed = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
 }
 
 extension Color {
@@ -114,3 +121,11 @@ extension Color {
     public static let WAbackgroundSegment = Color.init(.sRGB, red: 212.0/255.0, green: 212.0/255.0, blue: 212.0/255.0, opacity: 1.0)
 }
 
+extension Date {
+    func getTimeStamp() -> String {
+        // initialize the date formatter and set the style
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm a"
+        return formatter.string(from: self)
+    }
+}

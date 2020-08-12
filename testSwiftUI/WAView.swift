@@ -28,7 +28,7 @@ struct WAView : View {
                     Text(verbatim: "STATUS").tag(1)
                     Text(verbatim: "CALLS").tag(2)
                 }
-                .frame(height: 60.0).background(Color.WADarkGreen).foregroundColor(.white)
+                .frame(height: 60.0).background(Color(AVColors.darkRed)).foregroundColor(.white)
                 .pickerStyle(SegmentedPickerStyle())
                     
                 
@@ -65,20 +65,18 @@ struct WAView : View {
             .sheet(isPresented: $addContactsViewPresented) {
                 AddContactsView(userStore: self.$userStore, hideView: self.$addContactsViewPresented)
             }
-        .navigationBarTitle("Wassup")
-        }//zstack
+        .navigationBarTitle("")
+        }
     }
 }
 
 struct FloatingButton: View {
     var body: some View {
         
-        Image(systemName: "line.horizontal.3.decrease.circle")
-            .resizable()
-            .frame(width: 50, height: 50)
-            .background(Color.WADarkGreen)
-            .clipShape(Circle())
-            .font(.subheadline).foregroundColor(.white)
+        Image(systemName: "person.crop.circle.fill.badge.plus")
+        .resizable()
+            .frame(width: 60, height: 50)
+            .foregroundColor(Color(AVColors.darkRed))
     }
 }
 
@@ -153,7 +151,7 @@ struct WAHomeRow : View {
                     
                 VStack(alignment: .leading) {
                     Text(userInfo.userName).font(.headline)
-                    Text(userInfo.lastMessage).font(.subheadline).foregroundColor(.gray)
+                    Text(userInfo.lastMessage?.message ?? "").font(.subheadline).foregroundColor(.gray)
                 }
             }
         }

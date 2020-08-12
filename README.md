@@ -2,8 +2,6 @@
 
 SwiftUI lets us build declarative user interfaces in Swift. There's a new declarative UI structure that defines how our layouts look and work. Updating the UI preview automatically generates new Swift code, and changing the Swift code updates the UI preview.
 
-I tried to replicate the UI of a well known App. My Attempt was to check how much of structure i can create with SwiftUI and results were amazing.
-
 >I am not sure if these are the best practises to do things in SwiftUI.
 > I removed all the preview code as i was running MacOS Mojave and there's no preview available yet. 
 
@@ -14,16 +12,16 @@ I tried to replicate the UI of a well known App. My Attempt was to check how muc
 <table>
     <tr>
         <td>
-            <img src = "Screenshots\WAChatList.png" width = 200 alt = "Chatlist">
+            <img src = "screen_shots\landing.png" width = 200 alt = "Chatlist">
         </td>
         <td>
-            <img src = "Screenshots\WAChatListDelete.png" width = 200 alt = "Chat list Delete">
+            <img src = "screen_shots\chat.png" width = 200 alt = "Chat list Delete">
         </td>
         <td>
-            <img src = "Screenshots\WAHome.png" width = 200 alt = "Home">
+            <img src = "screen_shots\msg_view.png" width = 200 alt = "Home">
         </td>
         <td>
-            <img src = "Screenshots\WAUserDetail.png" width = 200 alt = "user detail">
+            <img src = "screen_shots\user_details.png" width = 200 alt = "user detail">
         </td>
     </tr>
 </table>
