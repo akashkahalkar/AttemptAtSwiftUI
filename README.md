@@ -6,7 +6,7 @@ SwiftUI lets us build declarative user interfaces in Swift. There's a new declar
 > I removed all the preview code as i was running MacOS Mojave and there's no preview available yet. 
 
 ### Version
-> Swift 5, iOS 13, Xcode 11 beta
+> Swift UI, iOS 13, Xcode 11 beta
 
 ### Screenshots
 <table>
