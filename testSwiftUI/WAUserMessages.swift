@@ -12,7 +12,6 @@ import SwiftUI
 
 struct WAUserDetailView: View {
     
-    
     var user: UserInfo
     @State private var newMessage: String = ""
     @ObservedObject private var msgStore = MessageStore()
@@ -25,13 +24,17 @@ struct WAUserDetailView: View {
     }
     
     var body: some View {
+        
         VStack (alignment: HorizontalAlignment.leading) {
+            
             HStack(spacing: CGFloat(10.0)) {
                 Image(user.userImage)
                     .resizable()
                     .clipShape(Circle())
-                    .padding(.leading, 10.0).aspectRatio(contentMode: ContentMode.fill)
+                    .aspectRatio(contentMode: ContentMode.fill)
                     .frame(width: 50.0, height: 50.0)
+                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                    .padding(.leading, 10.0)
                 
                 
                 VStack(alignment: .leading) {
@@ -43,29 +46,42 @@ struct WAUserDetailView: View {
                         Text(verbatim: "online").font(.footnote).foregroundColor(.white)
                     }
                 }
-                }
-                .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: 80.0, alignment: .leading)
-                .background(Color(AVColors.darkRed))
+            }
+            .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: 80.0, alignment: .leading)
+            .background(Color(AVColors.headerBlue))
+            .shadow(radius: 5)
             Group {
                 //UITableView.appearance().separatorColor = .clear
                 WAChatList(user: user, msgStore: msgStore)
-                }.background(Color.WAMsgListBackground)
+            }.background(Color.WAMsgListBackground)
             
             Spacer()
-            HStack {
-                TextField("Type a message", text: $newMessage)
-                    .foregroundColor(Color(AVColors.darkRed))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Spacer()
-                Button(action: {
-                    self.sendMessage()
-                }) {
-                    Text(verbatim: "send")
-                }
-                }.padding().padding(.bottom, keyboard.currentHeight)
-            .navigationBarTitle("User details")
-            }
-            .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
+            ZStack {
+                RoundedRectangle(cornerRadius: 10).foregroundColor(.white).shadow(radius: 5).frame(height: 80).padding(.horizontal, 2)
+                
+                HStack {
+                    TextField("Type a message", text: $newMessage)
+                        .foregroundColor(Color(AVColors.headerBlue))
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Spacer()
+                    Button(action: {
+                        self.sendMessage()
+                        }) {
+                            
+                            Text("Send")
+                            .foregroundColor(.blue)
+                                .padding(.horizontal).padding(.vertical, 5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Color.blue, lineWidth: 1)
+                            )
+                    }
+                }.padding()
+                    
+            }.padding(.bottom, keyboard.currentHeight)
+        }
+        .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
+        .navigationBarTitle("User details")
     }
     
     func sendMessage() {
@@ -86,9 +102,9 @@ struct WAChatList: View {
         let messages = msgStore.messageDatabase[user.id] ?? []
         return List {
             ForEach(messages) {
-                WAChatListRow(message: $0).frame(height: 50)
+                WAChatListRow(message: $0).frame(height: 50).animation(Animation.easeInOut)
             }.onDelete(perform: delete)
-        }
+        }.environment(\.defaultMinListRowHeight, 60)
     }
     
     func delete(at index: IndexSet) {
@@ -115,13 +131,13 @@ struct WAChatListRow: View {
             HStack {
                 HStack {
                     Text(message.message)
-                    Text(message.timeStamp).font(.footnote)
-                    }
+                    Text(message.timeStamp).font(.footnote).foregroundColor(.gray).offset(x: 0, y: 10)
+                }
                 .padding()
                 .background(color)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                }
-            .frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 50, alignment: alignment)
+            }.frame(minWidth: .zero, maxWidth: .infinity, maxHeight: 50, alignment: alignment)
+                .shadow(color: .gray, radius: 2, x: 1, y: 1)
         }
     }
 }

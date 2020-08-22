@@ -8,59 +8,87 @@
 
 import SwiftUI
 
+
+
+enum Menu: Int, CaseIterable {
+    case chat, status, calls
+    
+    func getMenuTitle() -> String {
+        switch self {
+            
+            case .chat: return "CHAT"
+            case .status: return "STATUS"
+            case .calls: return "CALLS"
+        }
+    }
+}
+
 // MARK: - Home
 struct WAView : View {
     /// It is not advise to use external dependecies with @State wrapper
     @State private var userStore: UserStore = UserStore()
     @State private var addContactsViewPresented = false
     @State private var selectetState: Int = 0
-    
+
     init() {
+        //configuring table view appearance
         UITableView.appearance().tableFooterView = UIView()
-        UITableView.appearance().separatorStyle = .singleLine
+        UITableView.appearance().separatorStyle = .none
+        UITableView.appearance().backgroundColor = AVColors.cellBackgroundColor
+        UITableViewCell.appearance().backgroundColor = AVColors.cellBackgroundColor
+        
+        UISegmentedControl
+            .appearance()
+            .setTitleTextAttributes([.foregroundColor: AVColors.headerLightBlue,
+                                     .font: UIFont.boldSystemFont(ofSize: 12)], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        UISegmentedControl.appearance().tintColor = UIColor.clear
     }
     
     var body: some View {
+        //zstack with bottom trailing to add floating button at bottom with the view
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading) {
+                //top bar using segmented control
                 Picker(selection: $selectetState, label: Text(verbatim: "picker")) {
-                    Text(verbatim: "CHAT").tag(0)
-                    Text(verbatim: "STATUS").tag(1)
-                    Text(verbatim: "CALLS").tag(2)
-                }
-                .frame(height: 60.0).background(Color(AVColors.darkRed)).foregroundColor(.white)
-                .pickerStyle(SegmentedPickerStyle())
                     
+                    MenuSegment(selectedState: $selectetState, menu: Menu.chat)
+                    MenuSegment(selectedState: $selectetState, menu: Menu.status)
+                    MenuSegment(selectedState: $selectetState, menu: Menu.calls)
+                }
+                .frame(height: 60.0)
+                .background(Color(AVColors.headerBlue))
+                .foregroundColor(.white)
+                .pickerStyle(SegmentedPickerStyle())
                 
-                if selectetState == 0 {
+                if selectetState == Menu.chat.rawValue {
                     List {
                         ForEach(userStore.userInfo) { user in
-                            WAHomeRow(userInfo: user)
+                            ListRow(userInfo: user)
                         }
-                    }
-                } else if selectetState == 1 {
+                    }.environment(\.defaultMinListRowHeight, 100)
+                } else if selectetState == Menu.status.rawValue {
                     List {
                         StatusRow()
                         StatusRow()
                         StatusRow()
                         
-                    }
+                    }.environment(\.defaultMinListRowHeight, 100)
                 } else {
                     List {
                         StatusRow()
                         StatusRow()
                         StatusRow()
-                    }
+                    }.environment(\.defaultMinListRowHeight, 100)
                 }
             }
             .frame(minWidth: .zero, maxWidth: .infinity, minHeight: .zero, maxHeight: .infinity, alignment: .leading)
-            //.background(Color.WADarkGreen)
             
             Button(action: {
                 self.addContactsViewPresented.toggle()
             }) {
-                FloatingButton().padding(.trailing, 10.0)
-            }
+                FloatingButton().padding(.bottom, 20).padding(.trailing, 20)
+            }.buttonStyle(PlainButtonStyle())
             
             .sheet(isPresented: $addContactsViewPresented) {
                 AddContactsView(userStore: self.$userStore, hideView: self.$addContactsViewPresented)
@@ -70,13 +98,35 @@ struct WAView : View {
     }
 }
 
+struct MenuSegment: View {
+    
+    @Binding var selectedState: Int
+    var menu: Menu
+    
+    var body: some View {
+        
+        Text(verbatim: menu.getMenuTitle()).font(Font.system(.title)).bold()
+            .tag(menu.rawValue)
+    }
+}
+
+//floating button at bottom right corner
 struct FloatingButton: View {
     var body: some View {
         
-        Image(systemName: "person.crop.circle.fill.badge.plus")
-        .resizable()
-            .frame(width: 60, height: 50)
-            .foregroundColor(Color(AVColors.darkRed))
+        ZStack {
+            Circle()
+                .foregroundColor(Color.white)
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 5, y: 5)
+            
+            Image(systemName: "plus")
+                .resizable()
+                .padding()
+                .foregroundColor(Color(AVColors.darkRed))
+                .font(Font.system(.body))
+
+            }.frame(width: 50, height: 50)
+            
     }
 }
 
@@ -90,7 +140,8 @@ struct AddContactsView: View {
             VStack(alignment: .leading) {
                 Text("Enter friends Name").foregroundColor(.black)
                 HStack {
-                    TextField("Enter friends name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Enter friends name", text: $name)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                     
                     Button(action: {
                         self.addUser()
@@ -135,46 +186,82 @@ struct HeaderButton: View {
     }
 }
 // MARK: Home row
-struct WAHomeRow : View {
+//list row with image title and subtitle
+struct ListRow : View {
     
+    let userImageSize: CGFloat  = 40.0
     var userInfo: UserInfo
+    
     var body: some View {
-        NavigationLink(destination: WAUserDetailView(user: userInfo)) {
-            HStack {
-                Image(userInfo.userImage)
-                    .resizable()
-                    .clipShape(Circle())
-                    .aspectRatio(contentMode: ContentMode.fill)
-                    .frame(width: CGFloat(50.0),
-                           height: CGFloat(50.0),
-                           alignment: Alignment.center)
+        
+        ZStack(alignment: .leading) {
+            
+            //background view with shadow
+            RoundedRectangle(cornerRadius: 10.0)
+                .foregroundColor(Color(AVColors.cellColor))
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 4, y: 0)
+            
+            NavigationLink(destination: WAUserDetailView(user: userInfo)) {
+                
+                HStack {
+                    ZStack(alignment: .bottomTrailing) {
+                        Image(userInfo.userImage)
+                        .resizable()
+                        .clipShape(Circle())
+                        .aspectRatio(contentMode: ContentMode.fill)
+                        .frame(width: userImageSize,
+                               height: userImageSize,
+                               alignment: Alignment.center)
+                        .shadow(radius: 3)
+                        
+                        //online indicator
+                        Circle()
+                            .foregroundColor(.green).frame(width: 10, height: 10)
+                    }
+                        
                     
-                VStack(alignment: .leading) {
-                    Text(userInfo.userName).font(.headline)
-                    Text(userInfo.lastMessage?.message ?? "").font(.subheadline).foregroundColor(.gray)
+                    VStack(alignment: .leading) {
+                        Text(userInfo.userName).font(.headline)
+                        Text(userInfo.lastMessage?.message ?? "No recent message")
+                            .font(.subheadline).foregroundColor(.gray)
+                    }
                 }
-            }
-        }
+            }.padding()
+        }.padding(.top, 5)
     }
 }
 
 struct StatusRow : View {
     
+    let userImageSize: CGFloat  = 40.0
+    
     var body: some View {
-        HStack {
-            Image(systemName: "faceid")
-                .resizable()
-                .clipShape(Circle())
-                .aspectRatio(contentMode: ContentMode.fill)
-                .frame(width: CGFloat(50.0),
-                       height: CGFloat(50.0),
-                       alignment: Alignment.center)
+        
+        ZStack(alignment: .leading) {
+            
+            //background view with shadow
+            RoundedRectangle(cornerRadius: 10.0)
+                .foregroundColor(Color(AVColors.cellColor))
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 4, y: 0)
+            
+            HStack {
+                Image(systemName: "faceid")
+                    .resizable()
+                    .clipShape(Circle())
+                    .aspectRatio(contentMode: ContentMode.fill)
+                    .frame(width: userImageSize,
+                           height: userImageSize,
+                           alignment: Alignment.center)
+                    .shadow(radius: 3)
+                    .padding()
                 
-            VStack(alignment: .leading) {
-                Text("userInfo.userName").font(.headline)
-                Text("userInfo.lastUpdateTiming").font(.subheadline).foregroundColor(.gray)
+                VStack(alignment: .leading) {
+                    Text("userInfo.userName").font(.headline)
+                    Text("subtitle")
+                        .font(.subheadline).foregroundColor(.gray)
+                }
             }
-        }
+        }.padding(.top, 5)
     }
 }
 

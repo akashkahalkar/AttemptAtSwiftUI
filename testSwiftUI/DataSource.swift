@@ -111,6 +111,10 @@ class UserStore: ObservableObject {
 
 struct AVColors {
     public static let darkRed = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
+    public static let cellBackgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9764705882, alpha: 1)
+    public static let cellColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    public static let headerBlue = #colorLiteral(red: 0.03552591801, green: 0.1493889689, blue: 0.3180473447, alpha: 1)
+    public static let headerLightBlue = #colorLiteral(red: 0.1423024237, green: 0.2444138229, blue: 0.3886321485, alpha: 1)
 }
 
 extension Color {
@@ -127,5 +131,8 @@ extension Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm a"
         return formatter.string(from: self)
+       // #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9764705882, alpha: 1)
+        
+       // #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
 }
