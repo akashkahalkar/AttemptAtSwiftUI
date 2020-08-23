@@ -1,0 +1,16 @@
+name: Build
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+    
+    steps:
+    - uses: actions/checkout@master
+    - name: Start xcodebuild
+      run: xcodebuild clean build -project testSwiftUI.xcodeproj -scheme testSwiftUI -destination "platform=iOS Simulator,name=iPhone 11 pro"
