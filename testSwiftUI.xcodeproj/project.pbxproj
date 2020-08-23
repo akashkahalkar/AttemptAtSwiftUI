@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2C3C188A22A649FB002378E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C188922A649FB002378E8 /* AppDelegate.swift */; };
 		2C3C188C22A649FB002378E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C188B22A649FB002378E8 /* SceneDelegate.swift */; };
-		2C3C188E22A649FB002378E8 /*  WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C188D22A649FB002378E8 /*  WelcomeScreen.swift */; };
 		2C3C189022A649FE002378E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C3C188F22A649FE002378E8 /* Assets.xcassets */; };
 		2C3C189322A649FE002378E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C3C189222A649FE002378E8 /* Preview Assets.xcassets */; };
 		2C3C189622A649FE002378E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C3C189422A649FE002378E8 /* LaunchScreen.storyboard */; };
@@ -19,13 +18,14 @@
 		2CA8FCDC22B2728100DC3952 /* WAUserMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8FCDB22B2728100DC3952 /* WAUserMessages.swift */; };
 		2CA8FCDE22B272F400DC3952 /* WAUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8FCDD22B272F400DC3952 /* WAUserInfoView.swift */; };
 		2CA8FCE022B27D9800DC3952 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8FCDF22B27D9800DC3952 /* MapView.swift */; };
+		38C72C5024F2B1E50011E890 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C188D22A649FB002378E8 /* WelcomeScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2C3C188622A649FB002378E8 /* testSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C3C188922A649FB002378E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C3C188B22A649FB002378E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2C3C188D22A649FB002378E8 /*  WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " WelcomeScreen.swift"; sourceTree = "<group>"; };
+		2C3C188D22A649FB002378E8 /* WelcomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		2C3C188F22A649FE002378E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C3C189222A649FE002378E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2C3C189522A649FE002378E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 				2C3C188922A649FB002378E8 /* AppDelegate.swift */,
 				2C3C188B22A649FB002378E8 /* SceneDelegate.swift */,
 				2CA24DC322B0BC6300B0170A /* DataSource.swift */,
-				2C3C188D22A649FB002378E8 /*  WelcomeScreen.swift */,
+				2C3C188D22A649FB002378E8 /* WelcomeScreen.swift */,
 				2C44991122AE326D00F18403 /* WAView.swift */,
 				2CA8FCDF22B27D9800DC3952 /* MapView.swift */,
 				2CA8FCDB22B2728100DC3952 /* WAUserMessages.swift */,
@@ -164,6 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38C72C5024F2B1E50011E890 /* WelcomeScreen.swift in Sources */,
 				2CA24DC422B0BC6300B0170A /* DataSource.swift in Sources */,
 				2CA8FCE022B27D9800DC3952 /* MapView.swift in Sources */,
 				2C3C188A22A649FB002378E8 /* AppDelegate.swift in Sources */,
@@ -171,7 +172,6 @@
 				2C3C188C22A649FB002378E8 /* SceneDelegate.swift in Sources */,
 				2C44991222AE326D00F18403 /* WAView.swift in Sources */,
 				2CA8FCDC22B2728100DC3952 /* WAUserMessages.swift in Sources */,
-				2C3C188E22A649FB002378E8 /*  WelcomeScreen.swift in Sources */,
 				2CA8FCDE22B272F400DC3952 /* WAUserInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
