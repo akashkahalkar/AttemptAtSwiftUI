@@ -1,5 +1,7 @@
 # An Attempt at Swift UI
 
+![Build](https://github.com/akashkahalkar/AttemptAtSwiftUI/workflows/Build/badge.svg)
+
 SwiftUI lets us build declarative user interfaces in Swift. There's a new declarative UI structure that defines how our layouts look and work. Updating the UI preview automatically generates new Swift code, and changing the Swift code updates the UI preview.
 
 >I am not sure if these are the best practises to do things in SwiftUI.
